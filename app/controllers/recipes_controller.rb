@@ -1,6 +1,9 @@
 class RecipesController < ApplicationController
   def show
     @recipe = Recipe.find(params[:id])
+    if @recipe.ingredients.last.try(:name)
+      @recipe.ingredients.build
+    end
   end
 
   def index
@@ -13,8 +16,14 @@ class RecipesController < ApplicationController
   end
 
   def create
-    @recipe = Recipe.new
+    recipe = Recipe.create(recipe_params)
     #@recipe.ingredients.build(recipe_params)
+    redirect_to recipe
+  end
+
+  def update
+    recipe = Recipe.find(params[:id])
+    recipe.update(recipe_params)
     redirect_to recipe
   end
 
